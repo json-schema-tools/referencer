@@ -20,6 +20,42 @@ Features:
  - No external dependencies
  - Fully typed against the generated [meta-schema typings](https://github.com/json-schema-tools/meta-schema/)
 
+
+## Usage
+
+install it:
+`npm install @json-schema-tools/referencer`
+
+use it:
+```typescript
+import referencer from "@json-schema-tools/referencer";
+
+const result = referencer({
+  title: "example",
+  type: "object",
+  properties: {
+    foo: { title: "foo", type: "number" },
+    bar: { title: "bar", type: "string" }
+  }
+});
+
+console.log(result);
+
+// outputs
+{
+  title: "example",
+  type: "object",
+  properties: {
+    foo: {$ref: "#/definitions/foo" },
+    bar: { $ref: "#/definitions/bar" }
+  },
+  definitions: {
+    foo: { title: "foo", type: "number" }
+    bar: { title: "bar", type: "string" }
+  }
+}
+```
+
 ## License
 
 Apache-2.0
