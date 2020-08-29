@@ -61,7 +61,7 @@ export class NoTitleError implements Error {
  *
  * @param s The schema to create references for (ie 'flatten' it)
  *
- * @returns Deep schema copy of the input schema where subschemas are turned into refs (recursively)
+ * @returns input schema where subschemas are turned into refs (recursively)
  *
  * @category Utils
  * @category SchemaImprover

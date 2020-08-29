@@ -103,6 +103,22 @@ describe("referencer", () => {
     expect(props.anotherFoo.$ref).toBe("#/definitions/foo");
   });
 
+  it("does mutate the input schema", () => {
+    const testSchema = {
+      title: "foo",
+      type: "object",
+      properties: { bar: { title: "bar", type: "number" } },
+    };
+
+    const reffed = referencer(testSchema) as JSONSchemaObject;
+
+    const props = reffed.properties as Properties;
+    const defs = reffed.definitions as Definitions;
+
+    expect(props.bar.$ref).toBe("#/definitions/bar");
+    expect(reffed).toBe(testSchema);
+  });
+
   it("already has some refs with dupes", () => {
     const testSchema = {
       title: "anyOfTheThings",
