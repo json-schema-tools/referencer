@@ -19,7 +19,7 @@ Features:
  - Completely synchronous
  - No external dependencies
  - Fully typed against the generated [meta-schema typings](https://github.com/json-schema-tools/meta-schema/)
-
+ - magically makes your json schema smaller.
 
 ## Usage
 
