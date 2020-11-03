@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/json-schema-tools/referencer/compare/1.0.2...1.0.3) (2020-11-03)
+
+
+### Bug Fixes
+
+* add docs ([a67a07f](https://github.com/json-schema-tools/referencer/commit/a67a07f1e7aa96e86edee05a2800092d5f8189cc))
+
 ## [1.0.2](https://github.com/json-schema-tools/referencer/compare/1.0.1...1.0.2) (2020-10-23)
 
 
