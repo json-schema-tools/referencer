@@ -1,0 +1,20 @@
+
+{
+  "name": "@json-schema-tools/referencer",
+  "entryPoints": [
+    "./src/index.ts"
+  ],
+  "out": "docs",
+  "readme": "./README.md",
+  "exclude": [
+    "node_modules",
+    "docs",
+    "build",
+    "jest.config.js",
+    "src/*.test.ts"
+  ],
+  "toc": [
+    "referencer",
+    "NoTitleError"
+  ]
+}
