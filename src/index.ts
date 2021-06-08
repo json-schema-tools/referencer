@@ -125,4 +125,4 @@ export default function referencer(s: JSONSchema): JSONSchema {
   }
 
   return s;
-};
+}
