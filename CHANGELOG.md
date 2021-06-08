@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/json-schema-tools/referencer/compare/1.0.3...1.0.4) (2021-06-08)
+
+
+### Bug Fixes
+
+* linting fixup ([04d6243](https://github.com/json-schema-tools/referencer/commit/04d62436e0e40348d4fe5dcc1d14901f4ebcdab2))
+* update deps ([7bfb05b](https://github.com/json-schema-tools/referencer/commit/7bfb05b7cee8ef07de40cd8187b437b20a25ff22))
+
 ## [1.0.3](https://github.com/json-schema-tools/referencer/compare/1.0.2...1.0.3) (2020-11-03)
 
 
