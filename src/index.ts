@@ -67,7 +67,7 @@ export class NoTitleError implements Error {
  * @category SchemaImprover
  *
  */
-export default (s: JSONSchema): JSONSchema => {
+export default function referencer(s: JSONSchema): JSONSchema {
   const definitions: any = {};
 
   traverse(
@@ -125,4 +125,4 @@ export default (s: JSONSchema): JSONSchema => {
   }
 
   return s;
-};
+}
