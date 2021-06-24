@@ -64,7 +64,7 @@ describe("referencer", () => {
           ],
         },
       ],
-    };
+    } as JSONSchema;
     const reffed = referencer(testSchema) as JSONSchemaObject;
 
     const defs = reffed.definitions as Definitions;
@@ -94,7 +94,7 @@ describe("referencer", () => {
 
     testSchema.properties.anotherFoo = testSchema;
 
-    const reffed = referencer(testSchema) as JSONSchemaObject;
+    const reffed = referencer(testSchema as JSONSchema) as JSONSchemaObject;
 
     const props = reffed.properties as Properties;
     const defs = reffed.definitions as Definitions;
@@ -110,10 +110,9 @@ describe("referencer", () => {
       properties: { bar: { title: "bar", type: "number" } },
     };
 
-    const reffed = referencer(testSchema) as JSONSchemaObject;
+    const reffed = referencer(testSchema as JSONSchema) as JSONSchemaObject;
 
     const props = reffed.properties as Properties;
-    const defs = reffed.definitions as Definitions;
 
     expect(props.bar.$ref).toBe("#/definitions/bar");
     expect(reffed).toBe(testSchema);
@@ -149,7 +148,7 @@ describe("referencer", () => {
         },
       },
     };
-    const reffed = referencer(testSchema) as JSONSchemaObject;
+    const reffed = referencer(testSchema as JSONSchema) as JSONSchemaObject;
 
     const defs = reffed.definitions as Definitions;
 
