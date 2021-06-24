@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/json-schema-tools/referencer/compare/1.0.4...1.0.5) (2021-06-24)
+
+
+### Bug Fixes
+
+* update to new meta-schema ([521cb6f](https://github.com/json-schema-tools/referencer/commit/521cb6fc253040d6dda4b9f657fe18697b9e8891))
+
 ## [1.0.4](https://github.com/json-schema-tools/referencer/compare/1.0.3...1.0.4) (2021-06-08)
 
 
