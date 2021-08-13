@@ -164,20 +164,19 @@ describe("referencer", () => {
     expect(defs.baz.properties.cba.$ref).toBe("#/definitions/cba");
   });
 
-  it.only("flatten only complex types", () => {
+  it("flatten only complex types", () => {
     const testSchema = {
-      title: "filterComplexTypes",
+      title: "FilterComplexTypes",
       properties: {
         bar: {
           type: "string",
         },
-        qux: true,
         baz: {
           title: "baz",
           type: "array",
           items: [
             {
-              title: "complexType",
+              title: "ComplexType1",
               type: "object",
               properties: {
                 foo: {
@@ -186,6 +185,19 @@ describe("referencer", () => {
               },
             },
           ],
+        },
+        qux:  {
+          title: "ComplexType2",
+          type: "object",
+          properties: {
+            quux: {
+              title: "ComplexType3",
+              type: "object",
+              properties: {
+                quuz: true,
+              },
+            },
+          },
         },
       },
     };
@@ -198,13 +210,18 @@ describe("referencer", () => {
 
     expect(props.bar.type).toBe("string");
     expect(props.bar.$ref).toBeUndefined();
-    expect(props.qux).toBe(true);
     expect(props.baz.type).toBe("array");
     expect(props.baz.$ref).toBeUndefined();
     expect(props.baz.title).toBe("baz");
     const bazItems = props.baz.items as JSONSchema[];
     expect(bazItems).toHaveLength(1);
-    expect((bazItems[0] as JSONSchemaObject).$ref).toBe("#/definitions/complexType");
-    expect(defs.complexType.title).toBe("complexType");
+    expect((bazItems[0] as JSONSchemaObject).$ref).toBe("#/definitions/ComplexType1");
+    expect(defs.ComplexType1.title).toBe("ComplexType1");
+    expect(props.qux.$ref).toBe("#/definitions/ComplexType2");
+    expect(defs.ComplexType2.title).toBe("ComplexType2");
+    expect(defs.ComplexType2.properties.quux.$ref).toBe("#/definitions/ComplexType3");
+    expect(defs.ComplexType3.title).toBe("ComplexType3");
+    expect(defs.ComplexType3.properties.quuz).toBe(true);
+
   });
 });
