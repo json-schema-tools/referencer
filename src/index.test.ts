@@ -163,4 +163,48 @@ describe("referencer", () => {
     expect(defs.allOfFoo.allOf[1].$ref).toBe("#/definitions/baz");
     expect(defs.baz.properties.cba.$ref).toBe("#/definitions/cba");
   });
+
+  it.only("flatten only complex types", () => {
+    const testSchema = {
+      title: "filterComplexTypes",
+      properties: {
+        bar: {
+          type: "string",
+        },
+        qux: true,
+        baz: {
+          title: "baz",
+          type: "array",
+          items: [
+            {
+              title: "complexType",
+              type: "object",
+              properties: {
+                foo: {
+                  type: "number",
+                },
+              },
+            },
+          ],
+        },
+      },
+    };
+    const reffed = referencer(testSchema, {
+      onlyComplex: true,
+    }) as JSONSchemaObject;
+
+    const props = reffed.properties as Properties;
+    const defs = reffed.definitions as Definitions;
+
+    expect(props.bar.type).toBe("string");
+    expect(props.bar.$ref).toBeUndefined();
+    expect(props.qux).toBe(true);
+    expect(props.baz.type).toBe("array");
+    expect(props.baz.$ref).toBeUndefined();
+    expect(props.baz.title).toBe("baz");
+    const bazItems = props.baz.items as JSONSchema[];
+    expect(bazItems).toHaveLength(1);
+    expect((bazItems[0] as JSONSchemaObject).$ref).toBe("#/definitions/complexType");
+    expect(defs.complexType.title).toBe("complexType");
+  });
 });

@@ -100,6 +100,9 @@ export default function referencer(s: JSONSchema, options: Options = {}): JSONSc
     (subSchema: JSONSchema, isRootCycle: boolean) => {
       let t = "";
       if (!isObject(subSchema)) { // For schema that is boolean
+        if (onlyComplex) {
+          return subSchema;
+        }
         if (subSchema === true) {
           t = "AlwaysTrue";
           definitions[t as string] = true;
