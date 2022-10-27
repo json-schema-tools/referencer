@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/json-schema-tools/referencer/compare/1.0.5...1.0.6) (2022-10-27)
+
+
+### Bug Fixes
+
+* bump version in ci ([40b2f14](https://github.com/json-schema-tools/referencer/commit/40b2f1400428ad1f4d59116e537af1a9ad8c33b1))
+* update deps and node version ([f617ad7](https://github.com/json-schema-tools/referencer/commit/f617ad76c075a52981a360162412a9ef14c4e18f))
+
 ## [1.0.5](https://github.com/json-schema-tools/referencer/compare/1.0.4...1.0.5) (2021-06-24)
 
 
