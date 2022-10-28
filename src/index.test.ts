@@ -163,4 +163,65 @@ describe("referencer", () => {
     expect(defs.allOfFoo.allOf[1].$ref).toBe("#/definitions/baz");
     expect(defs.baz.properties.cba.$ref).toBe("#/definitions/cba");
   });
+
+  it("flatten only complex types", () => {
+    const testSchema = {
+      title: "FilterComplexTypes",
+      properties: {
+        bar: {
+          type: "string",
+        },
+        baz: {
+          title: "baz",
+          type: "array",
+          items: [
+            {
+              title: "ComplexType1",
+              type: "object",
+              properties: {
+                foo: {
+                  type: "number",
+                },
+              },
+            },
+          ],
+        },
+        qux:  {
+          title: "ComplexType2",
+          type: "object",
+          properties: {
+            quux: {
+              title: "ComplexType3",
+              type: "object",
+              properties: {
+                quuz: true,
+              },
+            },
+          },
+        },
+      },
+    };
+    const reffed = referencer(testSchema, {
+      onlyComplex: true,
+    }) as JSONSchemaObject;
+
+    const props = reffed.properties as Properties;
+    const defs = reffed.definitions as Definitions;
+
+    expect(props.bar.type).toBe("string");
+    expect(props.bar.$ref).toBeUndefined();
+    expect(props.baz.type).toBe("array");
+    expect(props.baz.$ref).toBeUndefined();
+    expect(props.baz.title).toBe("baz");
+    const bazItems = props.baz.items as JSONSchema[];
+    expect(bazItems).toHaveLength(1);
+    expect((bazItems[0] as JSONSchemaObject).$ref).toBe("#/definitions/ComplexType1");
+    expect(defs.ComplexType1.title).toBe("ComplexType1");
+    expect(props.qux.$ref).toBe("#/definitions/ComplexType2");
+    expect(defs.ComplexType2.title).toBe("ComplexType2");
+    expect(defs.ComplexType2.properties.quux.$ref).toBe("#/definitions/ComplexType3");
+    expect(defs.ComplexType3.title).toBe("ComplexType3");
+    expect(defs.ComplexType3.properties.quuz).toBe(true);
+
+  });
 });
