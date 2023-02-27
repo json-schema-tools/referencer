@@ -53,6 +53,20 @@ export class NoTitleError implements Error {
 }
 
 /**
+ * Options that can be passed into the Referencer.
+ */
+export interface ReferencerOptions {
+  /**
+   * If true, the schema passed in will be referenced in-place, mutating the original. Default is false.
+   */
+  mutate?: boolean;
+}
+
+const defaultReferencerOptions = {
+  mutate: false,
+};
+
+/**
  * Returns the schema where all subschemas have been replaced with $refs and added to definitions.
  *
  * All of the subschemas must have a title. If you are unsure if you have titles for all
@@ -67,10 +81,10 @@ export class NoTitleError implements Error {
  * @category SchemaImprover
  *
  */
-export default function referencer(s: JSONSchema): JSONSchema {
+export default function referencer(s: JSONSchema, options: ReferencerOptions = defaultReferencerOptions): JSONSchema {
   const definitions: any = {};
 
-  traverse(
+  let newS = traverse(
     s,
     (subSchema: JSONSchema, isRootCycle: boolean) => {
       let t = "";
@@ -117,12 +131,16 @@ export default function referencer(s: JSONSchema): JSONSchema {
 
       return subSchema;
     },
-    { mutable: true, skipFirstMutation: true },
+    { mutable: options.mutate, skipFirstMutation: true },
   );
 
-  if (typeof s === "object" && Object.keys(definitions).length > 0) {
-    s.definitions = { ...s.definitions, ...definitions };
+  if (options.mutate === true) {
+    newS = s;
   }
 
-  return s;
+  if (typeof newS === "object" && Object.keys(definitions).length > 0) {
+    newS.definitions = { ...newS.definitions, ...definitions };
+  }
+
+  return newS;
 }
