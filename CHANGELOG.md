@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/json-schema-tools/referencer/compare/1.0.6...1.1.0) (2023-02-27)
+
+
+### Bug Fixes
+
+* bump node version in ci ([1af6dd1](https://github.com/json-schema-tools/referencer/commit/1af6dd1309fe88ca07ddeea7cf9088a5f4130baa))
+
+
+### Features
+
+* immutable by default with option to mutate ([59cf27e](https://github.com/json-schema-tools/referencer/commit/59cf27e1e845619d4eb9a35029fd00958aafe5b5))
+
 ## [1.0.6](https://github.com/json-schema-tools/referencer/compare/1.0.5...1.0.6) (2022-10-27)
 
 
