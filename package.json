@@ -28,7 +28,7 @@
   "devDependencies": {
     "@json-schema-tools/meta-schema": "^1.7.0",
     "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.7",
+    "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
     "eslint": "^8.26.0",
