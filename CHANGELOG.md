@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/json-schema-tools/referencer/compare/1.1.0...1.1.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* bump to node 20 ([d4ce52a](https://github.com/json-schema-tools/referencer/commit/d4ce52a592a8abd9b7daabfbf1bbdbeb2122577d))
+* get rid of undefined issue ([ae5ec72](https://github.com/json-schema-tools/referencer/commit/ae5ec72397fe8672fed6d26ddbc0da5e95a7d14a))
+* update package lock ([1b4a7c1](https://github.com/json-schema-tools/referencer/commit/1b4a7c16e53d7c710a6cf082c806818706a5367d))
+
 # [1.1.0](https://github.com/json-schema-tools/referencer/compare/1.0.6...1.1.0) (2023-02-27)
 
 
