@@ -26,10 +26,10 @@
     "!build/**/*.test.*"
   ],
   "devDependencies": {
-    "@json-schema-tools/dereferencer": "^1.6.2",
-    "@json-schema-tools/meta-schema": "^1.7.0",
-    "@json-schema-tools/titleizer": "^1.0.8",
-    "@json-schema-tools/transpiler": "^1.10.3",
+    "@json-schema-tools/dereferencer": "^1.6.3",
+    "@json-schema-tools/meta-schema": "^1.7.5",
+    "@json-schema-tools/titleizer": "^1.0.9",
+    "@json-schema-tools/transpiler": "^1.10.4",
     "@types/jest": "^29.2.0",
     "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
@@ -41,7 +41,7 @@
     "typescript": "^5.4.4"
   },
   "dependencies": {
-    "@json-schema-tools/traverse": "^1.10.1"
+    "@json-schema-tools/traverse": "^1.10.4"
   },
   "homepage": "https://github.com/json-schema-tools/referencer#readme",
   "description": "Get a copy of a JSON Schema where all subschemas are turned into `$ref`s with corresponding definitions section."
