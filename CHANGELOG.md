@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/json-schema-tools/referencer/compare/1.1.2...1.1.3) (2024-05-07)
+
+
+### Bug Fixes
+
+* dump deps ([199a5c9](https://github.com/json-schema-tools/referencer/commit/199a5c9cd9afe7ed12c987939b304091e32fc07e))
+
 ## [1.1.2](https://github.com/json-schema-tools/referencer/compare/1.1.1...1.1.2) (2024-05-07)
 
 
