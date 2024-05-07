@@ -3,7 +3,7 @@ import { JSONSchema } from "@json-schema-tools/meta-schema";
 
 const deleteAllProps = (o: { [k: string]: any }) => {
   Object.keys(o)
-    .forEach((k) => { if (k !== 'title') delete o[k]; });
+    .forEach((k) => { delete o[k]; });
 };
 
 export const stringifyCircular = (obj: any) => {
