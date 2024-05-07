@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/json-schema-tools/referencer/compare/1.1.1...1.1.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* dont add extra titles ([c4f645a](https://github.com/json-schema-tools/referencer/commit/c4f645aaa8752836123197413f8410835902e747))
+
 ## [1.1.1](https://github.com/json-schema-tools/referencer/compare/1.1.0...1.1.1) (2024-05-07)
 
 
