@@ -3,7 +3,7 @@ import { JSONSchema } from "@json-schema-tools/meta-schema";
 
 const deleteAllProps = (o: { [k: string]: any }) => {
   Object.keys(o)
-    .forEach((k) => { delete o[k]; });
+    .forEach((k) => { if (k !== 'title') delete o[k]; });
 };
 
 export const stringifyCircular = (obj: any) => {
@@ -105,8 +105,8 @@ export default function referencer(s: JSONSchema, options: ReferencerOptions = d
           return { $ref: `#/definitions/${s.title}` };
         }
 
+
         definitions[subSchema.title as string] = { ...subSchema };
-        deleteAllProps(subSchema);
         subSchema.$ref = `#/definitions/${subSchema.title}`;
         return subSchema;
       }
