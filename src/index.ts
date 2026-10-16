@@ -184,7 +184,12 @@ export default function referencer(s: JSONSchema, options: ReferencerOptions = d
         // breakRootCycles after traversal, because the callback's return
         // value now becomes the new root.
         if (objectSchema.title === (s as JSONSchemaObject).title) {
-          const rootTitle = (s as JSONSchemaObject).title as string;
+          const rootTitle = (s as JSONSchemaObject).title;
+          if (typeof rootTitle !== "string") {
+            // A cycle back to the root cannot be represented without a title
+            // to key the definition by (see #585).
+            throw new NoTitleError(objectSchema, s);
+          }
           definitions[rootTitle] = { $ref: `#` };
           rootCycleTitle = rootTitle;
           return objectSchema;
