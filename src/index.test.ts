@@ -103,6 +103,17 @@ describe("referencer", () => {
     expect(props.anotherFoo.$ref).toBe("#/definitions/foo");
   });
 
+  it("throws NoTitleError for an untitled root with a self-cycle", () => {
+    const testSchema: any = {
+      type: "object",
+      properties: { self: {} },
+    };
+
+    testSchema.properties.self = testSchema;
+
+    expect(() => referencer(testSchema as JSONSchema)).toThrow(NoTitleError);
+  });
+
   it("already has some refs with dupes", () => {
     const testSchema = {
       title: "anyOfTheThings",
