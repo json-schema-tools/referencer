@@ -3,7 +3,7 @@ import { JSONSchema, JSONSchemaObject } from "@json-schema-tools/meta-schema";
 
 const deleteAllProps = (o: { [k: string]: unknown }) => {
   Object.keys(o)
-    .forEach((k) => { delete o[k]; });
+    .forEach((k) => { if (k !== 'title') delete o[k]; });
 };
 
 const isObject = (obj?: JSONSchema) => {
@@ -65,14 +65,6 @@ export class NoTitleError implements Error {
   }
 }
 
-export interface Options {
-  /**
-   * By setting this to `true`, only complex types (`object`) will be replaced.
-   * @default false
-   */
-  onlyComplex?: boolean;
-}
-
 /**
  * Options that can be passed into the Referencer.
  */
@@ -81,6 +73,11 @@ export interface ReferencerOptions {
    * If true, the schema passed in will be referenced in-place, mutating the original. Default is false.
    */
   mutate?: boolean;
+  /**
+   * By setting this to `true`, only complex types (`object`) will be replaced.
+   * @default false
+   */
+  onlyComplex?: boolean;
 }
 
 const defaultReferencerOptions = {

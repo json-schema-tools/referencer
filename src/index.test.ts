@@ -208,6 +208,25 @@ describe("referencer", () => {
     expect(defs.ComplexType3.title).toBe("ComplexType3");
     expect(defs.ComplexType3.properties.quuz).toBe(true);
   });
+
+  it("onlyComplex handles cycles without undefined refs", () => {
+    const testSchema: any = {
+      title: "foo",
+      type: "object",
+      properties: { anotherFoo: {} },
+    };
+
+    testSchema.properties.anotherFoo = testSchema;
+
+    const reffed = referencer(testSchema as JSONSchema, { onlyComplex: true }) as JSONSchemaObject;
+
+    const props = reffed.properties as Properties;
+    const defs = reffed.definitions as Definitions;
+
+    expect(Object.keys(defs)).not.toContain("undefined");
+    expect((defs as any).foo.$ref).toBe("#");
+    expect((props as any).anotherFoo.$ref).toBe("#/definitions/foo");
+  });
   
   describe("Mutable", () => {
     it("does not mutate the input schema", () => {
