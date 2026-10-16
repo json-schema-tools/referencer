@@ -5,6 +5,13 @@
 
 * dump deps ([199a5c9](https://github.com/json-schema-tools/referencer/commit/199a5c9cd9afe7ed12c987939b304091e32fc07e))
 
+## [1.2.0](https://github.com/json-schema-tools/referencer/compare/1.1.3...1.2.0) (2026-10-16)
+
+
+### Features
+
+* filter only complex types ([#254](https://github.com/json-schema-tools/referencer/issues/254)) ([9829c48](https://github.com/json-schema-tools/referencer/commit/9829c484f3ceb79ce695b87672a8655e7f42663a))
+
 ## [1.1.2](https://github.com/json-schema-tools/referencer/compare/1.1.1...1.1.2) (2024-05-07)
 
 
