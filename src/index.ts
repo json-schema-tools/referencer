@@ -1,9 +1,22 @@
 import traverse from "@json-schema-tools/traverse";
-import { JSONSchema } from "@json-schema-tools/meta-schema";
+import { JSONSchema, JSONSchemaObject } from "@json-schema-tools/meta-schema";
 
 const deleteAllProps = (o: { [k: string]: unknown }) => {
   Object.keys(o)
-    .forEach((k) => { delete o[k]; });
+    .forEach((k) => { if (k !== 'title') delete o[k]; });
+};
+
+const isObject = (obj?: JSONSchema) => {
+  return obj && obj === Object(obj)
+};
+
+const isComplex = (obj: JSONSchemaObject) =>  {
+  // TODO: evaluate if `array` should be considered complex
+  return (obj.type === 'object' && typeof obj.properties === 'object');
+};
+
+const hasReference = (obj: JSONSchemaObject) => {
+  return typeof obj.$ref === 'string' && obj.$ref.length > 0 && obj.$ref.indexOf("#") !== -1;
 };
 
 export const stringifyCircular = (obj: unknown) => {
@@ -60,6 +73,11 @@ export interface ReferencerOptions {
    * If true, the schema passed in will be referenced in-place, mutating the original. Default is false.
    */
   mutate?: boolean;
+  /**
+   * By setting this to `true`, only complex types (`object`) will be replaced.
+   * @default false
+   */
+  onlyComplex?: boolean;
 }
 
 const defaultReferencerOptions = {
@@ -74,6 +92,7 @@ const defaultReferencerOptions = {
  * exists in the input schema's definitions object.
  *
  * @param s The schema to create references for (ie 'flatten' it)
+ * @param options The custom options
  *
  * @returns input schema where subschemas are turned into refs (recursively)
  *
@@ -82,54 +101,64 @@ const defaultReferencerOptions = {
  *
  */
 export default function referencer(s: JSONSchema, options: ReferencerOptions = defaultReferencerOptions): JSONSchema {
+  const {
+    onlyComplex = false,
+  } = options;
   const definitions: Record<string, JSONSchema> = {};
-
+  
   let newS = traverse(
     s,
     (subSchema: JSONSchema, isRootCycle: boolean) => {
       let t = "";
-      if (isRootCycle && subSchema !== true && subSchema !== false) {
-        if (subSchema.$ref) {
-          const title = subSchema.$ref.replace("#/definitions/", "");
+      if (!isObject(subSchema)) { // For schema that is boolean
+        if (onlyComplex) {
+          return subSchema;
+        }
+        if (subSchema === true) {
+          t = "AlwaysTrue";
+          definitions[t as string] = true;
+        } else if (subSchema === false) {
+          t = "AlwaysFalse";
+          definitions[t as string] = false;
+        }
+        return subSchema;
+      }
+
+      // Otherwise it is a object schema
+      const objectSchema = subSchema as JSONSchemaObject;
+      if (isRootCycle) {
+        if (objectSchema.$ref) {
+          const title = objectSchema.$ref.replace("#/definitions/", "");
           const hasDefForRef = definitions[title];
 
           if (hasDefForRef === undefined) {
-            throw new Error(`Encountered unknown $ref: ${subSchema.$ref}`);
+            throw new Error(`Encountered unknown $ref: ${objectSchema.$ref}`);
           }
 
-          return subSchema;
+          return objectSchema;
         }
 
-        if (subSchema === s) {
+        if (objectSchema === s) {
           definitions[s.title as string] = { $ref: `#` };
           return { $ref: `#/definitions/${s.title}` };
         }
 
-
-        definitions[subSchema.title as string] = { ...subSchema };
-        subSchema.$ref = `#/definitions/${subSchema.title}`;
-        return subSchema;
+        definitions[objectSchema.title as string] = { ...objectSchema };
+        objectSchema.$ref = `#/definitions/${objectSchema.title}`;
+        return objectSchema;
       }
 
-      if (subSchema === true) {
-        t = "AlwaysTrue";
-        definitions[t as string] = true;
-      } else if (subSchema === false) {
-        t = "AlwaysFalse";
-        definitions[t as string] = false;
-      } else if (subSchema.$ref !== undefined && subSchema.$ref.indexOf("#") !== -1) {
-        return subSchema;
-      } else {
-        if (typeof subSchema.title !== "string") {
-          throw new NoTitleError(subSchema, s);
+      if (!hasReference(objectSchema) && (!onlyComplex || isComplex(objectSchema))) {
+        if (typeof objectSchema.title !== "string") {
+          throw new NoTitleError(objectSchema, s);
         }
-        t = subSchema.title as string;
-        definitions[t as string] = { ...subSchema };
-        deleteAllProps(subSchema);
-        subSchema.$ref = `#/definitions/${t}`;
+        t = objectSchema.title as string;
+        definitions[t as string] = { ...objectSchema };
+        deleteAllProps(objectSchema);
+        objectSchema.$ref = `#/definitions/${t}`;
       }
 
-      return subSchema;
+      return objectSchema;
     },
     { mutable: options.mutate, skipFirstMutation: true },
   );

@@ -9,7 +9,7 @@
   </span>
 </center>
 
-Referencer is a package that exports a single function - a function that accepts and returns a JSON Schema. The returned schema is 'flat', as in, any subschemas of the schema have been converted into $refs. Further, any of the subschemas' subschema are also $reffed, recurively until everything is a $ref, and the definition section is fully populated.
+Referencer is a package that exports a single function - a function that accepts and returns a JSON Schema. The returned schema is 'flat', as in, any subschemas of the schema have been converted into $refs. Further, any of the subschemas' subschema are also $reffed, recursively until everything is a $ref, and the definition section is fully populated.
 
 The input schema may have refs, but the refs must already be in the definitions section.
 The input schema, as well as all of its subschemas must have titles. Their titles must also be unique for their content. We would like to use $id, but it has special meaning and therefor title is used as the unique identifier on-which schemas will be referenced.
