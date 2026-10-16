@@ -209,6 +209,25 @@ describe("referencer", () => {
     expect(defs.ComplexType3.properties.quuz).toBe(true);
   });
 
+  it("onlyComplex without mutate does not mutate the input schema", () => {
+    const testSchema = {
+      title: "FilterComplexTypes",
+      properties: {
+        bar: { type: "string" },
+        baz: {
+          title: "baz",
+          type: "object",
+          properties: { foo: { type: "number" } },
+        },
+      },
+    };
+    const snapshot = JSON.stringify(testSchema);
+
+    referencer(testSchema as JSONSchema, { onlyComplex: true });
+
+    expect(JSON.stringify(testSchema)).toBe(snapshot);
+  });
+
   it("onlyComplex handles cycles without undefined refs", () => {
     const testSchema: any = {
       title: "foo",

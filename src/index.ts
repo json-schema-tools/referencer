@@ -19,6 +19,34 @@ const hasReference = (obj: JSONSchemaObject) => {
   return typeof obj.$ref === 'string' && obj.$ref.length > 0 && obj.$ref.indexOf("#") !== -1;
 };
 
+/**
+ * Replaces direct references to the root schema with a $ref to its definition.
+ *
+ * Since @json-schema-tools/traverse 1.12, a cycle back to the root invokes the
+ * mutation with the root's mutable copy (not the original schema), and the return
+ * value becomes the new root. The cycle site therefore cannot be fixed from inside
+ * the callback; instead the callback records the root definition and this post-pass
+ * swaps every remaining identity-reference to the root for the $ref.
+ */
+const breakRootCycles = (root: JSONSchemaObject, originalRoot: JSONSchema, title: string) => {
+  const visited = new Set<unknown>();
+  const visit = (node: unknown): void => {
+    if (typeof node !== "object" || node === null || visited.has(node)) {
+      return;
+    }
+    visited.add(node);
+    for (const key of Object.keys(node)) {
+      const child = (node as Record<string, unknown>)[key];
+      if (child === root || child === originalRoot) {
+        (node as Record<string, unknown>)[key] = { $ref: `#/definitions/${title}` };
+      } else {
+        visit(child);
+      }
+    }
+  };
+  visit(root);
+};
+
 export const stringifyCircular = (obj: unknown) => {
   const cache: unknown[] = [];
   return JSON.stringify(obj, (key, value) => {
@@ -103,9 +131,15 @@ const defaultReferencerOptions = {
 export default function referencer(s: JSONSchema, options: ReferencerOptions = defaultReferencerOptions): JSONSchema {
   const {
     onlyComplex = false,
+    mutate = false,
   } = options;
   const definitions: Record<string, JSONSchema> = {};
-  
+  // Set when a cycle back to the root schema is found. Kept as a flag because
+  // traverse >= 1.12 reports the root cycle against the root's mutable copy
+  // (whose return value becomes the new root), so the cycle site is repaired
+  // in a post-pass via breakRootCycles instead of inside the callback.
+  let rootCycleTitle: string | undefined;
+
   let newS = traverse(
     s,
     (subSchema: JSONSchema, isRootCycle: boolean) => {
@@ -143,6 +177,19 @@ export default function referencer(s: JSONSchema, options: ReferencerOptions = d
           return { $ref: `#/definitions/${s.title}` };
         }
 
+        // A cycle back to the root schema. Since traverse 1.12 the callback
+        // receives the root's mutable copy rather than the original schema,
+        // so the root is detected by title (titles are unique by contract)
+        // instead of object identity. The cycle site itself is repaired by
+        // breakRootCycles after traversal, because the callback's return
+        // value now becomes the new root.
+        if (objectSchema.title === (s as JSONSchemaObject).title) {
+          const rootTitle = (s as JSONSchemaObject).title as string;
+          definitions[rootTitle] = { $ref: `#` };
+          rootCycleTitle = rootTitle;
+          return objectSchema;
+        }
+
         definitions[objectSchema.title as string] = { ...objectSchema };
         objectSchema.$ref = `#/definitions/${objectSchema.title}`;
         return objectSchema;
@@ -160,15 +207,19 @@ export default function referencer(s: JSONSchema, options: ReferencerOptions = d
 
       return objectSchema;
     },
-    { mutable: options.mutate, skipFirstMutation: true },
+    { mutable: mutate, skipFirstMutation: true },
   );
 
-  if (options.mutate === true) {
+  if (mutate === true) {
     newS = s;
   }
 
   if (typeof newS === "object" && Object.keys(definitions).length > 0) {
     newS.definitions = { ...newS.definitions, ...definitions };
+  }
+
+  if (rootCycleTitle !== undefined && typeof newS === "object" && newS !== null) {
+    breakRootCycles(newS as JSONSchemaObject, s, rootCycleTitle);
   }
 
   return newS;
