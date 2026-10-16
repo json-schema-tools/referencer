@@ -103,21 +103,6 @@ describe("referencer", () => {
     expect(props.anotherFoo.$ref).toBe("#/definitions/foo");
   });
 
-  it("does mutate the input schema", () => {
-    const testSchema = {
-      title: "foo",
-      type: "object",
-      properties: { bar: { title: "bar", type: "number" } },
-    };
-
-    const reffed = referencer(testSchema as JSONSchema) as JSONSchemaObject;
-
-    const props = reffed.properties as Properties;
-
-    expect(props.bar.$ref).toBe("#/definitions/bar");
-    expect(reffed).toBe(testSchema);
-  });
-
   it("already has some refs with dupes", () => {
     const testSchema = {
       title: "anyOfTheThings",
@@ -222,6 +207,37 @@ describe("referencer", () => {
     expect(defs.ComplexType2.properties.quux.$ref).toBe("#/definitions/ComplexType3");
     expect(defs.ComplexType3.title).toBe("ComplexType3");
     expect(defs.ComplexType3.properties.quuz).toBe(true);
+  });
+  
+  describe("Mutable", () => {
+    it("does not mutate the input schema", () => {
+      const testSchema = Object.freeze({
+        title: "foo",
+        type: "object",
+        properties: { bar: { title: "bar", type: "number" } },
+      });
 
+      const reffed = referencer(testSchema as JSONSchema) as JSONSchemaObject;
+
+      const props = reffed.properties as Properties;
+
+      expect(props.bar.$ref).toBe("#/definitions/bar");
+      expect(reffed).not.toBe(testSchema);
+    });
+
+    it("does mutate the input schema when options.mutate === true", () => {
+      const testSchema = {
+        title: "foo",
+        type: "object",
+        properties: { bar: { title: "bar", type: "number" } },
+      };
+
+      const reffed = referencer(testSchema as JSONSchema, { mutate: true }) as JSONSchemaObject;
+
+      const props = reffed.properties as Properties;
+
+      expect(props.bar.$ref).toBe("#/definitions/bar");
+      expect(reffed).toBe(testSchema);
+    });
   });
 });

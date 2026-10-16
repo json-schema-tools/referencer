@@ -1,7 +1,7 @@
 import traverse from "@json-schema-tools/traverse";
 import { JSONSchema, JSONSchemaObject } from "@json-schema-tools/meta-schema";
 
-const deleteAllProps = (o: { [k: string]: any }) => {
+const deleteAllProps = (o: { [k: string]: unknown }) => {
   Object.keys(o)
     .forEach((k) => { delete o[k]; });
 };
@@ -19,8 +19,8 @@ const hasReference = (obj: JSONSchemaObject) => {
   return typeof obj.$ref === 'string' && obj.$ref.length > 0 && obj.$ref.indexOf("#") !== -1;
 };
 
-export const stringifyCircular = (obj: any) => {
-  const cache: any[] = [];
+export const stringifyCircular = (obj: unknown) => {
+  const cache: unknown[] = [];
   return JSON.stringify(obj, (key, value) => {
     if (typeof value === "object" && value !== null) {
       if (cache.indexOf(value) !== -1) {
@@ -42,13 +42,13 @@ export class NoTitleError implements Error {
 
     try {
       schemaStr = JSON.stringify(schema);
-    } catch (e) {
+    } catch {
       schemaStr = stringifyCircular(schema);
     }
 
     try {
       parentSchemaStr = JSON.stringify(parentSchema);
-    } catch (e) {
+    } catch {
       parentSchemaStr = stringifyCircular(parentSchema);
     }
 
@@ -74,6 +74,20 @@ export interface Options {
 }
 
 /**
+ * Options that can be passed into the Referencer.
+ */
+export interface ReferencerOptions {
+  /**
+   * If true, the schema passed in will be referenced in-place, mutating the original. Default is false.
+   */
+  mutate?: boolean;
+}
+
+const defaultReferencerOptions = {
+  mutate: false,
+};
+
+/**
  * Returns the schema where all subschemas have been replaced with $refs and added to definitions.
  *
  * All of the subschemas must have a title. If you are unsure if you have titles for all
@@ -89,13 +103,13 @@ export interface Options {
  * @category SchemaImprover
  *
  */
-export default function referencer(s: JSONSchema, options: Options = {}): JSONSchema {
+export default function referencer(s: JSONSchema, options: ReferencerOptions = defaultReferencerOptions): JSONSchema {
   const {
     onlyComplex = false,
   } = options;
-  const definitions: any = {};
-
-  traverse(
+  const definitions: Record<string, JSONSchema> = {};
+  
+  let newS = traverse(
     s,
     (subSchema: JSONSchema, isRootCycle: boolean) => {
       let t = "";
@@ -133,7 +147,6 @@ export default function referencer(s: JSONSchema, options: Options = {}): JSONSc
         }
 
         definitions[objectSchema.title as string] = { ...objectSchema };
-        deleteAllProps(objectSchema);
         objectSchema.$ref = `#/definitions/${objectSchema.title}`;
         return objectSchema;
       }
@@ -150,12 +163,16 @@ export default function referencer(s: JSONSchema, options: Options = {}): JSONSc
 
       return objectSchema;
     },
-    { mutable: true, skipFirstMutation: true },
+    { mutable: options.mutate, skipFirstMutation: true },
   );
 
-  if (typeof s === "object" && Object.keys(definitions).length > 0) {
-    s.definitions = { ...s.definitions, ...definitions };
+  if (options.mutate === true) {
+    newS = s;
   }
 
-  return s;
+  if (typeof newS === "object" && Object.keys(definitions).length > 0) {
+    newS.definitions = { ...newS.definitions, ...definitions };
+  }
+
+  return newS;
 }

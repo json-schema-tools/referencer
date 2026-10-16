@@ -1,3 +1,46 @@
+## [1.1.3](https://github.com/json-schema-tools/referencer/compare/1.1.2...1.1.3) (2024-05-07)
+
+
+### Bug Fixes
+
+* dump deps ([199a5c9](https://github.com/json-schema-tools/referencer/commit/199a5c9cd9afe7ed12c987939b304091e32fc07e))
+
+## [1.1.2](https://github.com/json-schema-tools/referencer/compare/1.1.1...1.1.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* dont add extra titles ([c4f645a](https://github.com/json-schema-tools/referencer/commit/c4f645aaa8752836123197413f8410835902e747))
+
+## [1.1.1](https://github.com/json-schema-tools/referencer/compare/1.1.0...1.1.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* bump to node 20 ([d4ce52a](https://github.com/json-schema-tools/referencer/commit/d4ce52a592a8abd9b7daabfbf1bbdbeb2122577d))
+* get rid of undefined issue ([ae5ec72](https://github.com/json-schema-tools/referencer/commit/ae5ec72397fe8672fed6d26ddbc0da5e95a7d14a))
+* update package lock ([1b4a7c1](https://github.com/json-schema-tools/referencer/commit/1b4a7c16e53d7c710a6cf082c806818706a5367d))
+
+# [1.1.0](https://github.com/json-schema-tools/referencer/compare/1.0.6...1.1.0) (2023-02-27)
+
+
+### Bug Fixes
+
+* bump node version in ci ([1af6dd1](https://github.com/json-schema-tools/referencer/commit/1af6dd1309fe88ca07ddeea7cf9088a5f4130baa))
+
+
+### Features
+
+* immutable by default with option to mutate ([59cf27e](https://github.com/json-schema-tools/referencer/commit/59cf27e1e845619d4eb9a35029fd00958aafe5b5))
+
+## [1.0.6](https://github.com/json-schema-tools/referencer/compare/1.0.5...1.0.6) (2022-10-27)
+
+
+### Bug Fixes
+
+* bump version in ci ([40b2f14](https://github.com/json-schema-tools/referencer/commit/40b2f1400428ad1f4d59116e537af1a9ad8c33b1))
+* update deps and node version ([f617ad7](https://github.com/json-schema-tools/referencer/commit/f617ad76c075a52981a360162412a9ef14c4e18f))
+
 ## [1.0.5](https://github.com/json-schema-tools/referencer/compare/1.0.4...1.0.5) (2021-06-24)
 
 

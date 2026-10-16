@@ -17,6 +17,7 @@ The input schema, as well as all of its subschemas must have titles. Their title
 Features:
  - Cyclic schemas become cyclic references
  - Completely synchronous
+ - immutable by default, option to mutate in place.
  - No external dependencies
  - Fully typed against the generated [meta-schema typings](https://github.com/json-schema-tools/meta-schema/)
  - magically makes your json schema smaller.
