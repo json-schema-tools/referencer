@@ -5,6 +5,14 @@
 
 * dump deps ([199a5c9](https://github.com/json-schema-tools/referencer/commit/199a5c9cd9afe7ed12c987939b304091e32fc07e))
 
+## [1.2.1](https://github.com/json-schema-tools/referencer/compare/1.2.0...1.2.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* support @json-schema-tools/traverse 1.11+ ([#584](https://github.com/json-schema-tools/referencer/issues/584)) ([5ff6e3a](https://github.com/json-schema-tools/referencer/commit/5ff6e3a9a03c4cca9ee5fcf0cf29486339932c6b)), closes [#583](https://github.com/json-schema-tools/referencer/issues/583)
+* throw NoTitleError for untitled root with self-cycle ([#587](https://github.com/json-schema-tools/referencer/issues/587)) ([79e18d2](https://github.com/json-schema-tools/referencer/commit/79e18d2c2e77c456c936c2fff61a185ca3ac8efb))
+
 ## [1.2.0](https://github.com/json-schema-tools/referencer/compare/1.1.3...1.2.0) (2026-10-16)
 
 
