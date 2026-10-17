@@ -33,7 +33,7 @@
     "@json-schema-tools/titleizer": "^1.0.9",
     "@json-schema-tools/transpiler": "^1.10.4",
     "@types/jest": "^29.2.0",
-    "@types/node": "^22.5.0",
+    "@types/node": "^26.6.5",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
     "@typescript-eslint/parser": "^8.2.0",
     "eslint": "^10.12.0",
