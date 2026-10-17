@@ -27,7 +27,7 @@
     "!build/**/*.test.*"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
+    "@eslint/js": "^10.0.1",
     "@json-schema-tools/dereferencer": "^1.6.3",
     "@json-schema-tools/meta-schema": "^1.7.5",
     "@json-schema-tools/titleizer": "^1.0.9",
